@@ -22,6 +22,11 @@ module.exports = {
   rules: {
     'import/extensions': 'off',
     'react/jsx-filename-extension': 'off',
+    'no-trailing-spaces': 'off',
+    'react/react-in-jsx-scope': 'off',
+    'react/function-component-definition': 'off',
+    'arrow-body-style': 'off',
+    'import/prefer-default-export': 'off',
   },
   settings: {
     'import/resolver': {
