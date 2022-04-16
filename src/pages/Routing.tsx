@@ -6,7 +6,7 @@ const Routing = () => {
     <Routes>
       {
         Object.values(routesMap).map((route) => (
-          <Route path={route.path} element={route.element} />
+          <Route path={route.path} element={route.element} key={route.path} />
         ))
       }
     </Routes>

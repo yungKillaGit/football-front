@@ -1,0 +1,3 @@
+$app-bar-padding: 10px;
+$app-bar-height: 64px;
+$page-content-margin-top: calc(#{$app-bar-height + 32px} + #{$app-bar-padding * 2});
