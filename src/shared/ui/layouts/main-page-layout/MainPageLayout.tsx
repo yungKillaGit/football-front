@@ -1,10 +1,10 @@
+import { ReactNode, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { RouteConfig } from 'shared/model';
+import { RouteConfig } from 'shared/types';
 import { MenuItem, Typography } from '@mui/material';
-import { AppBar, Logo } from 'shared/ui/index';
 import { bem } from 'shared/lib';
 import './MainPageLayout.scss';
-import { ReactNode, useMemo } from 'react';
+import { AppBar, Logo } from 'shared/ui';
 
 interface Props {
   appBarLinks: RouteConfig[];
@@ -38,7 +38,7 @@ const MainPageLayout = ({ appBarLinks, children }: Props) => {
         }
       </AppBar>
       <div {...element('page-content', {}, 'grid-container')}>
-        <Typography variant="h2">
+        <Typography variant="h2" sx={{ mb: 4 }}>
           {activeLink?.title}
         </Typography>
         {children}

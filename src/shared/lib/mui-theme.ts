@@ -44,5 +44,20 @@ export const muiTheme = createTheme({
       fontSize: '26px',
       lineHeight: '36px',
     },
+    h3: {
+      fontWeight: 600,
+      fontSize: '24px',
+      lineHeight: '34px',
+    },
+    h4: {
+      fontWeight: 500,
+      fontSize: '22px',
+      lineHeight: '32px',
+    },
+    h5: {
+      fontWeight: 500,
+      fontSize: '20px',
+      lineHeight: '30px',
+    },
   },
 });
