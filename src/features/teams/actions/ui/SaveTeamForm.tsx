@@ -1,4 +1,4 @@
-import { FormBuilder, SubmitForm } from '@shared/ui';
+import { FormBuilder, SubmitForm } from '@ui';
 import { createEffect } from 'effector';
 import { createForm } from 'effector-forms';
 

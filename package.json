@@ -2,8 +2,9 @@
   "name": "football-front",
   "version": "0.1.0",
   "private": true,
-  "cracoConfig": "./tools/webpack/craco.config.js",
+  "cracoConfig": "./config/webpack/craco.config.js",
   "dependencies": {
+    "@craco/craco": "^6.4.3",
     "@effector/reflect": "^7.1.1",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
@@ -31,9 +32,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "browserslist": {
