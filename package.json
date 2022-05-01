@@ -21,7 +21,7 @@
     "bem-cn": "^3.0.1",
     "compose-function": "^3.0.3",
     "effector": "^22.3.0",
-    "effector-forms": "0.0.23-alpha.0",
+    "effector-forms": "0.0.23-beta.4",
     "effector-react": "^22.0.6",
     "lodash": "^4.17.21",
     "react": "^18.0.0",
