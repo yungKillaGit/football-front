@@ -1,9 +1,9 @@
 import { TextField } from '@mui/material';
 import { CommonInputProps } from '../../types';
 
-const Text = (props: CommonInputProps) => {
+const Text = ({ input, className }: CommonInputProps) => {
   return (
-    <TextField />
+    <TextField {...input} className={className} />
   );
 };
 

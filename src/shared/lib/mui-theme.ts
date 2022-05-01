@@ -1,4 +1,5 @@
-import { createTheme } from '@mui/material';
+import { createTheme, CSSInterpolation } from '@mui/material';
+import { TypographyOptions } from '@mui/material/styles/createTypography';
 
 const palette = {
   primary: {
@@ -8,6 +9,44 @@ const palette = {
   secondary: {
     main: '#e2af1e',
   },
+};
+
+const typography: TypographyOptions = {
+  body1: {
+    fontWeight: 500,
+    fontSize: '16px',
+    lineHeight: '24px',
+  },
+  h2: {
+    fontWeight: 600,
+    fontSize: '26px',
+    lineHeight: '36px',
+  },
+  h3: {
+    fontWeight: 600,
+    fontSize: '24px',
+    lineHeight: '34px',
+  },
+  h4: {
+    fontWeight: 500,
+    fontSize: '22px',
+    lineHeight: '32px',
+  },
+  h5: {
+    fontWeight: 500,
+    fontSize: '20px',
+    lineHeight: '30px',
+  },
+  caption: {
+    fontWeight: 500,
+    fontSize: '13px',
+    lineHeight: '18px',
+  },
+};
+
+const BaseInputStyle: CSSInterpolation = {
+  ...typography.body1,
+  padding: '8px 12px',
 };
 
 export const muiTheme = createTheme({
@@ -50,36 +89,22 @@ export const muiTheme = createTheme({
       styleOverrides: {
         paper: {
           minWidth: '40vw',
-          minHeight: '80vh',
+          minHeight: '60vh',
+          height: '100%',
+          maxHeight: '80vh',
         },
       },
     },
-  },
-  typography: {
-    body1: {
-      fontWeight: 500,
-      fontSize: '16px',
-      lineHeight: '24px',
+    MuiInputBase: {
+      styleOverrides: {
+        input: BaseInputStyle,
+      },
     },
-    h2: {
-      fontWeight: 600,
-      fontSize: '26px',
-      lineHeight: '36px',
-    },
-    h3: {
-      fontWeight: 600,
-      fontSize: '24px',
-      lineHeight: '34px',
-    },
-    h4: {
-      fontWeight: 500,
-      fontSize: '22px',
-      lineHeight: '32px',
-    },
-    h5: {
-      fontWeight: 500,
-      fontSize: '20px',
-      lineHeight: '30px',
+    MuiOutlinedInput: {
+      styleOverrides: {
+        input: BaseInputStyle,
+      },
     },
   },
+  typography,
 });

@@ -1,0 +1,10 @@
+.SubmitForm {
+  position: relative;
+  height: 100%;
+
+  &__actions {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+}

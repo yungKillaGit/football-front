@@ -1,0 +1,16 @@
+.FieldBuilder {
+  display: flex;
+  align-items: center;
+
+  &__label {
+    margin-right: 16px;
+  }
+
+  &__input {
+    &_with-label {
+      &_left {
+        margin-left: auto;
+      }
+    }
+  }
+}

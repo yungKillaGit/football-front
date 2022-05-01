@@ -1,14 +1,20 @@
+import { bem } from '@lib';
+import { Typography } from '@mui/material';
 import { Field, useField } from 'effector-forms';
+import { uniqueId } from 'lodash';
 import { ChangeEvent, FunctionComponent } from 'react';
-import FormField from '../form-field';
 import { CommonInputProps } from '../types';
+import './FieldBuilder.scss';
 
 export interface FieldBuilderProps {
   field: Field<any>;
   FieldRenderer: FunctionComponent<CommonInputProps>;
+  label?: string;
 }
 
-const FieldBuilder = ({ field, FieldRenderer }: FieldBuilderProps) => {
+const { block, element } = bem('FieldBuilder');
+
+const FieldBuilder = ({ field, FieldRenderer, label }: FieldBuilderProps) => {
   const connectedField = useField(field);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -18,12 +24,25 @@ const FieldBuilder = ({ field, FieldRenderer }: FieldBuilderProps) => {
   const input = {
     value: connectedField.value,
     onChange,
+    id: uniqueId('form-field-'),
   };
 
   return (
-    <FormField>
-      <FieldRenderer input={input} />
-    </FormField>
+    <div {...block()}>
+      {
+        label ? (
+          <label htmlFor={input.id} {...element('label')}>
+            <Typography variant="caption">
+              {label}
+            </Typography>
+          </label>
+        ) : null
+      }
+      <FieldRenderer
+        input={input}
+        {...element('input', { withLabel: label ? 'left' : false })}
+      />
+    </div>
   );
 };
 
