@@ -1,15 +1,17 @@
 import { createTheme } from '@mui/material';
 
-export const muiTheme = createTheme({
-  palette: {
-    primary: {
-      main: '#ac5e00',
-      light: '#FFF',
-    },
-    secondary: {
-      main: '#e2af1e',
-    },
+const palette = {
+  primary: {
+    main: '#ac5e00',
+    light: '#FFF',
   },
+  secondary: {
+    main: '#e2af1e',
+  },
+};
+
+export const muiTheme = createTheme({
+  palette,
   components: {
     MuiAppBar: {
       styleOverrides: {
@@ -29,6 +31,26 @@ export const muiTheme = createTheme({
         root: {
           userSelect: 'none',
           fontFamily: 'Tahoma, sans-serif',
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        contained: {
+          '&:hover': {
+            background: palette.secondary.main,
+          },
+        },
+      },
+      defaultProps: {
+        variant: 'contained',
+      },
+    },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          minWidth: '40vw',
+          minHeight: '80vh',
         },
       },
     },

@@ -16,10 +16,18 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": false,
+    "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
     "baseUrl": "./src",
+    "paths": {
+      "@pages": ["pages"],
+      "@features": ["features"],
+      "@entities": ["entities"],
+      "@api": ["shared/api"],
+      "@lib": ["shared/lib"],
+      "@ui": ["shared/ui"]
+    }
   },
   "include": [
     "src"

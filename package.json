@@ -2,6 +2,7 @@
   "name": "football-front",
   "version": "0.1.0",
   "private": true,
+  "cracoConfig": "./tools/webpack/craco.config.js",
   "dependencies": {
     "@effector/reflect": "^7.1.1",
     "@emotion/react": "^11.9.0",
@@ -19,6 +20,7 @@
     "bem-cn": "^3.0.1",
     "compose-function": "^3.0.3",
     "effector": "^22.3.0",
+    "effector-forms": "0.0.23-alpha.0",
     "effector-react": "^22.0.6",
     "lodash": "^4.17.21",
     "react": "^18.0.0",
@@ -61,6 +63,7 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.4.0",
-    "sass": "^1.50.0"
+    "sass": "^1.50.0",
+    "tsconfig-paths-webpack-plugin": "^3.5.2"
   }
 }
