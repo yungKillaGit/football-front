@@ -1,7 +1,7 @@
 import { TextField } from '@mui/material';
-import { CommonInputProps } from '../../types';
+import { FieldComponentProps } from '../../types';
 
-const Text = ({ input, className }: CommonInputProps) => {
+const Text = ({ input, className }: FieldComponentProps) => {
   return (
     <TextField {...input} className={className} />
   );

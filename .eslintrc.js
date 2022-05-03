@@ -48,6 +48,8 @@ module.exports = {
     'react/require-default-props': 'off',
     'no-unreachable': 'off',
     'react/no-array-index-key': 'off',
+    'no-undef': 'off',
+    'no-redeclare': 'off',
   },
   settings: {
     'import/resolver': {

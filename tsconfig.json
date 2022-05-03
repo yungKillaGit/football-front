@@ -27,7 +27,8 @@
       "@api": ["shared/api"],
       "@lib": ["shared/lib"],
       "@ui": ["shared/ui"]
-    }
+    },
+    "typeRoots": ["./node_modules/@types", "./src/react-app-env.d.ts"]
   },
   "include": [
     "src"

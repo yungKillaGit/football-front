@@ -1,15 +1,8 @@
-import { FunctionComponent } from 'react';
-import { CommonInputProps } from 'shared/ui/components/form-builder/types';
-import FieldBuilder from './field-builder';
-import { FieldBuilderProps } from './field-builder/FieldBuilder';
+import { Select } from './inputs/select';
 import { TextInput } from './inputs/text';
-
-const withFieldBuilder = (FieldRenderer: FunctionComponent<CommonInputProps>) => {
-  return (props: Omit<FieldBuilderProps, 'FieldRenderer'>) => (
-    <FieldBuilder {...props} FieldRenderer={FieldRenderer} />
-  );
-};
+import { withInput } from './with-input';
 
 export const FormBuilder = {
-  Text: withFieldBuilder(TextInput),
+  Text: withInput(TextInput),
+  Select: withInput(Select),
 };

@@ -1,4 +1,4 @@
-.FieldBuilder {
+.FormField {
   display: flex;
   align-items: center;
 
@@ -6,7 +6,7 @@
     margin-right: 16px;
   }
 
-  &__input {
+  &__input-container {
     &_with-label {
       &_left {
         margin-left: auto;
