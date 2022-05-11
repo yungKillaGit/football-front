@@ -1,2 +1,1 @@
-export * as teamsModel from './teams';
-export { teamsPage } from './teams';
+export { teamsModel } from './teams';

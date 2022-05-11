@@ -8,7 +8,7 @@ const SaveTeamModal = withModal({
   getTitle: (modalData) => (modalData ? 'Edit Team' : 'Add team'),
   modal: saveTeamModal,
 })(({ modalData }) => {
-  const currentTeam = modalData ? useStore(teamsModel.$teams)[+modalData] : null;
+  const currentTeam = modalData ? useStore(teamsModel.$entities)[+modalData] : null;
   return <SaveTeamForm currentTeam={currentTeam} />;
 });
 

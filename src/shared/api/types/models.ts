@@ -2,7 +2,7 @@ interface SimpleBaseModel {
   id: number;
 }
 
-interface BaseModel {
+export interface BaseModel {
   id: number;
   created: Date;
   updated: Date;

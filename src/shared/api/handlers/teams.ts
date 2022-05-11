@@ -1,18 +1,7 @@
 import { api, Team } from 'shared/api';
+import { createResourceApi } from '../resource-api';
 
 const endpoint = '/teams';
-
-export const getTeams = () => {
-  return api.get<Team[]>(endpoint);
-};
-
-export interface TeamByIdParams {
-  id: number;
-}
-
-export const getTeam = ({ id }: TeamByIdParams) => {
-  return api.get<Team>(`${endpoint}/${id}`);
-};
 
 export interface CreatePlayerDto {
   firstName?: string;
@@ -33,12 +22,6 @@ export interface CreateTeamDto extends TeamDto {
   players: CreatePlayerDto[];
 }
 
-export const createTeam = (payload: CreateTeamDto) => {
-  return api.post<Team>(endpoint, {
-    data: payload,
-  });
-};
-
 export interface UpdatePlayerDto extends CreatePlayerDto {
   id?: number;
   team?: Team;
@@ -52,12 +35,6 @@ export interface UpdateTeamDto extends TeamDto {
   };
 }
 
-export const updateTeam = ({ id, ...payload }: UpdateTeamDto): any => {
-  return api.put<Team>(`${endpoint}/${id}`, {
-    data: payload,
-  });
-};
-
-export const deleteTeam = ({ id }: TeamByIdParams) => {
-  return api.delete<Team>(`${endpoint}/${id}`);
-};
+export const teamsApi = createResourceApi<Team, CreateTeamDto, UpdateTeamDto>({
+  endpoint,
+});

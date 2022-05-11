@@ -1,5 +1,5 @@
 import { Team } from '@api';
-import { teamsModel, teamsPage, TeamsTable } from '@entities/teams';
+import { teamsModel, TeamsTable } from '@entities/teams';
 import { saveTeamModal, Teams } from '@features/teams';
 import { Box } from '@mui/material';
 import { variant } from '@effector/reflect';
@@ -20,7 +20,7 @@ const TeamsPage = ({ teams }: Props) => {
 
   const onDelete = ({ row }: TableActionsProps<Team>) => {
     confirm({}).then(() => {
-      teamsModel.events.teamDeleted({ id: row.id });
+      teamsModel.events.entityDeleted({ id: row.id });
     });
   };
 
@@ -42,7 +42,7 @@ const TeamsPage = ({ teams }: Props) => {
 
 export default variant({
   source: combine({
-    loading: teamsModel.$teamsLoading,
+    loading: teamsModel.$areEntitiesLoading,
   }, ({
     loading,
   }) => {
@@ -55,9 +55,9 @@ export default variant({
     loading: () => null,
     ready: TeamsPage,
   },
-  bind: { teams: teamsModel.$teamsList },
+  bind: { teams: teamsModel.$entitiesList },
   hooks: {
-    mounted: teamsModel.effects.getTeamsFx,
-    unmounted: teamsPage.unmounted,
+    mounted: teamsModel.effects.getManyFx,
+    unmounted: teamsModel.page.unmounted,
   },
 });

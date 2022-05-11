@@ -1,5 +1,8 @@
 import {
-  Flag, Region, teamsApi,
+  CreateTeamDto,
+  Flag,
+  Region,
+  UpdateTeamDto,
 } from '@api';
 import { teamsModel } from '@entities/teams';
 import { createForm } from '@lib';
@@ -15,7 +18,7 @@ const mapParams = (modalData: ModalState) => {
 
 export const saveTeamModal = createModal({
   name: 'save-team',
-  initFx: teamsModel.effects.getTeamFx,
+  initFx: teamsModel.effects.getOneFx,
   mapParams,
 });
 
@@ -41,7 +44,7 @@ export const saveTeamModel = {
 };
 
 sample({
-  clock: teamsModel.effects.getTeamFx.doneData,
+  clock: teamsModel.effects.getOneFx.doneData,
   target: teamPlayersModel.$teamPlayers,
   fn: ({ response }) => {
     return response.players.reduce((acc, key) => {
@@ -68,9 +71,9 @@ split({
 sample({
   clock: saveTeamModel.events.teamCreated,
   source: teamPlayersModel.$teamPlayersList,
-  target: [teamsModel.effects.createTeamFx, saveTeamModal.closed],
+  target: [teamsModel.effects.createOneFx, saveTeamModal.closed],
   fn: (teamPlayers, formValues) => {
-    const dto: teamsApi.CreateTeamDto = {
+    const dto: CreateTeamDto = {
       countryCode: formValues.countryCode,
       name: formValues.name,
       regionId: formValues.region.id,
@@ -86,9 +89,9 @@ sample({
 sample({
   clock: saveTeamModel.events.teamUpdated,
   source: [teamPlayersModel.$teamPlayers, teamPlayersModel.$deletedPlayers],
-  target: [teamsModel.effects.updateTeamFx, saveTeamModal.closed],
+  target: [teamsModel.effects.updateOneFx, saveTeamModal.closed],
   fn: ([changedPlayers, deletedPlayers], formValues) => {
-    const dto: teamsApi.UpdateTeamDto = {
+    const dto: UpdateTeamDto = {
       countryCode: formValues.countryCode,
       name: formValues.name,
       regionId: formValues.region.id,
