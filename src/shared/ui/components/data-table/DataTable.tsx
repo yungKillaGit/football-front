@@ -71,7 +71,7 @@ const DataTable = <T extends Record<string, any>>({
             }
             {
               needRenderActionsColumn ? (
-                <TableCell key="actions">
+                <TableCell key="actions" {...element('cell', { actions: true })}>
                   <Typography variant="body1" />
                 </TableCell>
               ) : null
@@ -100,11 +100,11 @@ const DataTable = <T extends Record<string, any>>({
               {
                 needRenderActionsColumn ? (
                   Actions ? (
-                    <TableCell key={`actions-${rowIndex}`}>
+                    <TableCell key={`actions-${rowIndex}`} {...element('cell', { sticky: true })}>
                       <Actions row={row} />
                     </TableCell>
                   ) : actionCallbacksExist ? (
-                    <TableCell>
+                    <TableCell {...element('cell', { actions: true })}>
                       <TableDefaultActions
                         row={row}
                         onEdit={onEdit}

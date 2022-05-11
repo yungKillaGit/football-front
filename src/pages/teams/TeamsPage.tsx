@@ -1,10 +1,11 @@
 import { Team } from '@api';
-import { teamsModel, TeamsTable } from '@entities/teams';
+import { teamsModel, teamsPage, TeamsTable } from '@entities/teams';
 import { saveTeamModal, Teams } from '@features/teams';
 import { Box } from '@mui/material';
-import { reflect } from '@effector/reflect';
+import { variant } from '@effector/reflect';
 import { TableActionsProps } from '@types';
 import { confirm } from '@ui';
+import { combine } from 'effector';
 
 interface Props {
   teams: Team[];
@@ -39,10 +40,24 @@ const TeamsPage = ({ teams }: Props) => {
   );
 };
 
-export default reflect({
-  view: TeamsPage,
+export default variant({
+  source: combine({
+    loading: teamsModel.$teamsLoading,
+  }, ({
+    loading,
+  }) => {
+    if (loading) {
+      return 'loading';
+    }
+    return 'ready';
+  }),
+  cases: {
+    loading: () => null,
+    ready: TeamsPage,
+  },
   bind: { teams: teamsModel.$teamsList },
   hooks: {
     mounted: teamsModel.effects.getTeamsFx,
+    unmounted: teamsPage.unmounted,
   },
 });

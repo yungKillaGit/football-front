@@ -4,7 +4,7 @@ import { DataTable } from 'shared/ui';
 
 const TeamFlag = ({ value }: CellRendererProps<Flag>) => {
   return (
-    <img src={`${API_BASE_URL}/${value.path}`} alt="team flag" />
+    <img style={{ height: 64, width: 64 }} src={`${API_BASE_URL}/${value.path}`} alt="team flag" />
   );
 };
 
@@ -45,7 +45,7 @@ const TeamsTable = ({
         onRowClick={onRowClick}
         onEdit={onEdit}
         onDelete={onDelete}
-        sx={{ maxHeight: 600 }}
+        sx={{ minHeight: 600, maxHeight: 600 }}
       />
     </div>
   );

@@ -1,9 +1,15 @@
 import {
-  combine, createEffect, createEvent, createStore, sample,
+  createEffect, createEvent, createStore, sample,
 } from 'effector';
 import { Team, teamsApi } from 'shared/api';
+import { createPage } from '@lib';
+
+export const teamsPage = createPage({
+  name: 'teams',
+});
 
 const teamDeleted = createEvent<teamsApi.TeamByIdParams>();
+const teamsLoaded = createEvent();
 
 const getTeamsFx = createEffect(teamsApi.getTeams);
 const getTeamFx = createEffect(teamsApi.getTeam);
@@ -12,8 +18,22 @@ const updateTeamFx = createEffect(teamsApi.updateTeam);
 const deleteTeamFx = createEffect(teamsApi.deleteTeam);
 
 export const $teams = createStore<Record<number, Team>>({});
+export const $teamsList = createStore<Team[]>([]);
+export const $teamsLoading = createStore(true).reset(teamsPage.unmounted);
 
-export const $teamsList = combine($teams, (teams) => Object.values(teams));
+sample({
+  clock: teamsLoaded,
+  target: $teamsLoading,
+  fn: () => false,
+});
+
+sample({
+  clock: getTeamsFx.doneData,
+  target: [$teamsList, teamsLoaded],
+  fn: (payload) => {
+    return payload.response;
+  },
+});
 
 sample({
   clock: getTeamsFx.doneData,

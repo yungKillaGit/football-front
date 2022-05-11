@@ -1,1 +1,3 @@
-export { default as LoadIndicator } from './LoadIndicator';
+import LoadIndicator from './LoadIndicator';
+
+export default LoadIndicator;
