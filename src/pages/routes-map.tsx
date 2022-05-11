@@ -1,8 +1,8 @@
 import loadable from '@loadable/component';
 
-const DashboardPage = loadable(() => import('./dashboard-page'));
-const TournamentsPage = loadable(() => import('./tournaments-page'));
-const TeamsPage = loadable(() => import('./teams-page'));
+const DashboardPage = loadable(() => import('./dashboard'));
+const TournamentsPage = loadable(() => import('./tournaments'));
+const TeamsPage = loadable(() => import('./teams'));
 
 export const routesMap = {
   dashboard: {
