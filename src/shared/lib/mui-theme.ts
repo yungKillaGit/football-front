@@ -83,15 +83,13 @@ export const muiTheme = createTheme({
       },
       defaultProps: {
         variant: 'contained',
+        type: 'button',
       },
     },
     MuiDialog: {
       styleOverrides: {
         paper: {
-          minWidth: '40vw',
-          minHeight: '60vh',
-          height: '100%',
-          maxHeight: '80vh',
+          maxWidth: 'unset',
         },
       },
     },
@@ -103,6 +101,13 @@ export const muiTheme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         input: BaseInputStyle,
+      },
+    },
+    MuiTableRow: {
+      styleOverrides: {
+        hover: {
+          cursor: 'pointer',
+        },
       },
     },
   },

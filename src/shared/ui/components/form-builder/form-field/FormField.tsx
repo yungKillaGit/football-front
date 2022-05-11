@@ -1,29 +1,29 @@
 import { bem } from '@lib';
 import { Typography } from '@mui/material';
-import { ReactNode } from 'react';
+import React from 'react';
 import './FormField.scss';
+import { FormFieldProps } from '../types';
 
 const { block, element } = bem('FormField');
 
-interface Props {
-  label?: string;
-  children: ReactNode;
-  inputId: string;
-}
-
-function FormField({ label, children, inputId }: Props) {
+function FormField<FieldValue>({
+  field,
+  label,
+  fullWidth,
+  children,
+}: FormFieldProps<FieldValue>) {
   return (
-    <div {...block()}>
+    <div {...block({ fullWidth })}>
       {
         label ? (
-          <label htmlFor={inputId} {...element('label')}>
-            <Typography variant="caption">
+          <label htmlFor={field.id} {...element('label')}>
+            <Typography variant="body2">
               {label}
             </Typography>
           </label>
         ) : null
       }
-      <div {...element('input-container', { withLabel: label ? 'left' : false })}>
+      <div {...element('input-container', { withLabel: Boolean(label) })}>
         {children}
       </div>
     </div>

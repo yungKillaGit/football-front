@@ -17,9 +17,23 @@ export interface Flag extends SimpleBaseModel {
   path: string;
 }
 
+export interface PlayerPosition extends SimpleBaseModel {
+  name: string;
+}
+
+export interface Player extends BaseModel {
+  firstName?: string;
+  lastName: string;
+  birthDate: Date;
+  shirtNumber: number;
+  position: PlayerPosition;
+  displayId: number;
+}
+
 export interface Team extends BaseModel {
   name: string;
   countryCode: string;
   flag: Flag;
   region: Region;
+  players: Player[];
 }

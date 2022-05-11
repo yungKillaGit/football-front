@@ -22,11 +22,12 @@
     "baseUrl": "./src",
     "paths": {
       "@pages": ["pages"],
-      "@features": ["features"],
-      "@entities": ["entities"],
+      "@features/*": ["features/*"],
+      "@entities/*": ["entities/*"],
       "@api": ["shared/api"],
       "@lib": ["shared/lib"],
-      "@ui": ["shared/ui"]
+      "@ui": ["shared/ui"],
+      "@types": ["shared/types"]
     },
     "typeRoots": ["./node_modules/@types", "./src/react-app-env.d.ts"]
   },

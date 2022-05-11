@@ -50,6 +50,7 @@ module.exports = {
     'react/no-array-index-key': 'off',
     'no-undef': 'off',
     'no-redeclare': 'off',
+    'no-nested-ternary': 'off',
   },
   settings: {
     'import/resolver': {

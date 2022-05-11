@@ -1,19 +1,19 @@
-export interface ChangeEvent<T = {
-  value: string;
-  name: string;
-}> {
-  target: T;
-}
+import { ReactNode } from 'react';
+import { ControllerRenderProps } from 'react-hook-form';
 
-export type BaseEventHandler = (event: ChangeEvent) => void;
-
-export interface InputConfig {
-  value: any;
-  onChange: BaseEventHandler;
+export interface FieldConfig extends ControllerRenderProps {
   id: string;
 }
 
-export interface FieldComponentProps {
-  input: InputConfig;
+export interface FieldComponentProps<ValueType = string> {
+  field: FieldConfig;
   className?: string;
+  fullWidth?: boolean;
+}
+
+export interface FormFieldProps<FieldValue = any> {
+  label?: string;
+  children: ReactNode;
+  fullWidth?: boolean;
+  field: FieldConfig;
 }

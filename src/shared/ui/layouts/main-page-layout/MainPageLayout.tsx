@@ -17,7 +17,7 @@ const MainPageLayout = ({ appBarLinks, children }: Props) => {
   const location = useLocation();
   const activeLink = useMemo(() => {
     return appBarLinks.find((x) => x.path === location.pathname);
-  }, [location]);
+  }, [appBarLinks, location.pathname]);
 
   return (
     <div {...block()}>

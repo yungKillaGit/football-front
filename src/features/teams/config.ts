@@ -1,1 +1,1 @@
-export const SAVE_TEAM_MODAL_NAME = 'save-team';
+export const MAX_TEAM_PLAYERS_NUMBER = 23;

@@ -1,3 +1,6 @@
+import { bem } from '@lib';
+import { get } from 'lodash';
+import { FC } from 'react';
 import * as React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -6,29 +9,72 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Typography } from '@mui/material';
+import { SxProps, Typography } from '@mui/material';
 
-import { ColumnConfig } from 'shared/types/data-table';
+import { ColumnConfig, TableActionsProps } from 'shared/types/data-table';
+import TableDefaultActions from './TableDefaultActions';
+import './DataTable.scss';
 
-interface Props<T = Record<string, any>> {
+interface Props<T> {
   columns: ColumnConfig[];
   data: T[];
+  Actions?: FC<TableActionsProps<T>>;
+  className?: string;
+  sx?: SxProps;
+  onRowClick?: (props: TableActionsProps<T>) => void;
+  onEdit?: (props: TableActionsProps<T>) => void;
+  onDelete?: (props: TableActionsProps<T>) => void;
 }
 
-const DataTable = ({ columns, data }: Props) => {
+const { block, element } = bem('DataTable');
+
+const DataTable = <T extends Record<string, any>>({
+  columns,
+  data,
+  Actions,
+  className = '',
+  sx,
+  onRowClick,
+  onEdit,
+  onDelete,
+}: Props<T>) => {
+  const handleRowClick = (row: T) => (event: any) => {
+    // TODO Add rows multi select.
+    if (onRowClick && event.target.localName !== 'button') {
+      onRowClick({ row });
+    }
+  };
+
+  const actionCallbacksExist = onEdit && onDelete;
+  const needRenderActionsColumn = !!Actions || actionCallbacksExist;
+
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650, minHeight: 500 }} aria-label="simple table">
+    <TableContainer
+      component={Paper}
+      sx={{
+        minHeight: 400,
+        ...sx,
+      }}
+      {...block({}, className)}
+    >
+      <Table aria-label="simple table" stickyHeader>
         <TableHead>
           <TableRow>
             {
               columns.map((column) => (
                 <TableCell key={column.accessor}>
-                  <Typography variant="h5">
+                  <Typography variant="body1">
                     {column.label}
                   </Typography>
                 </TableCell>
               ))
+            }
+            {
+              needRenderActionsColumn ? (
+                <TableCell key="actions">
+                  <Typography variant="body1" />
+                </TableCell>
+              ) : null
             }
           </TableRow>
         </TableHead>
@@ -36,14 +82,37 @@ const DataTable = ({ columns, data }: Props) => {
           {data.map((row, rowIndex) => (
             <TableRow
               key={row.id || rowIndex}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              hover
+              onClick={handleRowClick(row)}
+              {...element('row', { clickable: Boolean(onRowClick) })}
             >
               {
                 columns.map((column, columnIndex) => (
                   <TableCell key={`${column.accessor}-${rowIndex}-${columnIndex}`}>
-                    {column.render ? column.render({ value: row[column.accessor] }) : row[column.accessor]}
+                    {
+                      column.render
+                        ? column.render({ value: get(row, column.accessor), row })
+                        : get(row, column.accessor)
+                    }
                   </TableCell>
                 ))
+              }
+              {
+                needRenderActionsColumn ? (
+                  Actions ? (
+                    <TableCell key={`actions-${rowIndex}`}>
+                      <Actions row={row} />
+                    </TableCell>
+                  ) : actionCallbacksExist ? (
+                    <TableCell>
+                      <TableDefaultActions
+                        row={row}
+                        onEdit={onEdit}
+                        onDelete={onDelete}
+                      />
+                    </TableCell>
+                  ) : null
+                ) : null
               }
             </TableRow>
           ))}
@@ -53,4 +122,4 @@ const DataTable = ({ columns, data }: Props) => {
   );
 };
 
-export default React.memo(DataTable);
+export default DataTable;

@@ -1,52 +1,109 @@
-import { createEvent, createStore } from 'effector';
-import { useStore } from 'effector-react';
+import {
+  createEvent,
+  createStore,
+  sample,
+  Store,
+  Event,
+  Effect,
+  attach,
+} from 'effector';
+import { createEffect } from 'effector/compat';
 
-interface ModalConfig {
+export interface ModalState {
   open: boolean;
-}
-
-interface ModalEventParams {
+  data?: any;
   name: string;
+  loading: boolean;
 }
 
-const modalOpened = createEvent<ModalEventParams>();
-const modalClosed = createEvent<ModalEventParams>();
-const modalInitialized = createEvent<ModalEventParams>();
+interface ModalParams {
+  name: string;
+  initFx?: Effect<any, any>;
+  mapParams?: (params: ModalState) => any;
+}
 
-const $modals = createStore<Record<string, ModalConfig>>({})
-  .on<ModalEventParams>(modalOpened, (state, params) => {
-    return {
-      ...state,
-      [params.name]: {
-        open: true,
-      },
-    };
-  })
-  .on<ModalEventParams>(modalClosed, (state, params) => {
-    const newState = { ...state };
-    delete newState[params.name];
+type ModalOpenedParams = {
+  data?: any;
+} | void;
 
-    return newState;
-  })
-  .on<ModalEventParams>(modalInitialized, (state, params) => {
-    return {
-      ...state,
-      [params.name]: {
-        open: false,
-      },
-    };
+export interface ModalInstance {
+  opened: Event<ModalOpenedParams>;
+  closed: Event<void>;
+  initFx: Effect<any, any>;
+  $modal: Store<ModalState>;
+}
+
+export const createModal = ({
+  name,
+  mapParams = (params) => params,
+  initFx = createEffect(() => {}),
+}: ModalParams): ModalInstance => {
+  const opened = createEvent<ModalOpenedParams>();
+  const closed = createEvent();
+  const initModalFx = attach({
+    effect: initFx,
+    mapParams,
   });
 
-const useModalConfig = (modalName: string): ModalConfig | undefined => {
-  return useStore($modals)[modalName];
-};
+  const $modal = createStore<ModalState>({
+    open: false,
+    name,
+    loading: true,
+  });
 
-export const events = {
-  modalOpened,
-  modalClosed,
-  modalInitialized,
-};
+  sample({
+    clock: initModalFx.done,
+    source: $modal,
+    fn: (state) => ({
+      ...state,
+      loading: false,
+    }),
+    target: $modal,
+  });
 
-export const selectors = {
-  useModalConfig,
+  const openedFn = (state: ModalState, eventParams: ModalOpenedParams) => {
+    const { data, ...stateWithoutData } = state;
+    return {
+      ...stateWithoutData,
+      ...eventParams,
+      open: true,
+      loading: !!eventParams?.data,
+    };
+  };
+
+  sample({
+    clock: opened,
+    source: $modal,
+    fn: openedFn,
+    target: $modal,
+  });
+
+  sample({
+    clock: opened,
+    source: $modal,
+    fn: (state) => state,
+    filter: (state) => {
+      return Boolean(state.data);
+    },
+    target: initModalFx,
+  });
+
+  sample({
+    clock: closed,
+    source: $modal,
+    fn: (modalState) => {
+      return {
+        ...modalState,
+        open: false,
+      };
+    },
+    target: $modal,
+  });
+
+  return {
+    $modal,
+    opened,
+    closed,
+    initFx: initModalFx,
+  };
 };

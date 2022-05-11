@@ -1,4 +1,4 @@
-import { CellRendererProps, ColumnConfig } from 'shared/types/data-table';
+import { CellRendererProps, ColumnConfig, TableActionHandler } from 'shared/types/data-table';
 import { API_BASE_URL, Flag, Team } from 'shared/api';
 import { DataTable } from 'shared/ui';
 
@@ -26,12 +26,27 @@ const columns: ColumnConfig[] = [
 
 interface Props {
   teams: Team[];
+  onRowClick: TableActionHandler<Team>;
+  onEdit: TableActionHandler<Team>;
+  onDelete: TableActionHandler<Team>;
 }
 
-const TeamsTable = ({ teams }: Props) => {
+const TeamsTable = ({
+  teams,
+  onRowClick,
+  onEdit,
+  onDelete,
+}: Props) => {
   return (
     <div>
-      <DataTable columns={columns} data={teams} />
+      <DataTable<Team>
+        columns={columns}
+        data={teams}
+        onRowClick={onRowClick}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        sx={{ maxHeight: 600 }}
+      />
     </div>
   );
 };

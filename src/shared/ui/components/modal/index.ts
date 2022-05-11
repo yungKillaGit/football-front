@@ -1,2 +1,3 @@
-export { default as Modal } from './Modal';
-export * as modalsModel from './model';
+export * from './withModal';
+export * from './confirm';
+export * from './model';

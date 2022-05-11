@@ -1,9 +1,9 @@
-import { Button, modalsModel } from 'shared/ui';
-import { SAVE_TEAM_MODAL_NAME } from 'features/teams/config';
+import { Button } from 'shared/ui';
+import { saveTeamModal } from '../model/save-team';
 
 const AddTeamButton = () => {
   const openModal = () => {
-    modalsModel.events.modalOpened({ name: SAVE_TEAM_MODAL_NAME });
+    saveTeamModal.opened();
   };
 
   return (
