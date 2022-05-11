@@ -6,7 +6,6 @@ interface BaseModel {
   id: number;
   created: Date;
   updated: Date;
-  deleted: boolean;
 }
 
 export interface Region extends SimpleBaseModel {
