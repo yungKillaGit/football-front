@@ -1,5 +1,5 @@
 import { api, ApiResponse } from './api';
-import { BaseModel } from './types';
+import { BaseModel } from './models';
 
 interface ResourceApiParams {
   endpoint: string;

@@ -1,22 +1,48 @@
-import { BaseModel, IdPayload, ResourceApi } from '@api';
+import {
+  ApiResponse,
+  BaseModel,
+  IdPayload,
+  ResourceApi,
+} from '@api';
 import {
   combine,
   createEffect,
   createEvent,
   createStore,
   sample,
+  Event,
+  Effect,
+  Store,
 } from 'effector';
-import { createPage } from './page-model';
+import { createPage, PageModel } from './page-model';
 
 interface ResourceModelParams<Entity, CreateDto, UpdateDto> {
   name: string;
   resourceApi: ResourceApi<Entity, CreateDto, UpdateDto>;
 }
 
+export interface ResourceModel<Entity extends BaseModel, CreateDto, UpdateDto> {
+  page: PageModel;
+  events: {
+    allEntitiesLoaded: Event<void>;
+    entityDeleted: Event<IdPayload>;
+  };
+  effects: {
+    createOneFx: Effect<CreateDto, ApiResponse<Entity>, Error>;
+    deleteOneFx: Effect<IdPayload, ApiResponse<Entity>, Error>;
+    updateOneFx: Effect<UpdateDto, ApiResponse<Entity>, Error>;
+    getOneFx: Effect<IdPayload, ApiResponse<Entity>, Error>;
+    getManyFx: Effect<void, ApiResponse<Entity[]>, Error>;
+  };
+  $entities: Store<Record<number, Entity>>;
+  $entitiesList: Store<Entity[]>;
+  $areEntitiesLoading: Store<boolean>;
+}
+
 export const createResource = <Entity extends BaseModel, CreateDto, UpdateDto>({
   name,
   resourceApi,
-}: ResourceModelParams<Entity, CreateDto, UpdateDto>) => {
+}: ResourceModelParams<Entity, CreateDto, UpdateDto>): ResourceModel<Entity, CreateDto, UpdateDto> => {
   const page = createPage({ name });
 
   const allEntitiesLoaded = createEvent();

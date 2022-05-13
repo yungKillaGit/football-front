@@ -1,5 +1,5 @@
 import { isNumberOrString } from '@lib';
-import { ModalInstance } from '@ui';
+import { ModalModel } from '@ui';
 import { sample } from 'effector';
 import { useStore } from 'effector-react';
 import { FC, useEffect } from 'react';
@@ -15,7 +15,7 @@ export interface ModalContainerProps {
   routing?: boolean;
   getTitle?: <T>(modalData?: T) => string;
   ModalContent: FC<any>;
-  modal: ModalInstance;
+  modal: ModalModel;
 }
 
 function ModalContainer({

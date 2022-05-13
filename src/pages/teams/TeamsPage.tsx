@@ -1,63 +1,34 @@
-import { Team } from '@api';
-import { teamsModel, TeamsTable } from '@entities/teams';
-import { saveTeamModal, Teams } from '@features/teams';
-import { Box } from '@mui/material';
-import { variant } from '@effector/reflect';
-import { TableActionsProps } from '@types';
-import { confirm } from '@ui';
-import { combine } from 'effector';
+import { API_BASE_URL, Flag } from '@api';
+import { teamsModel } from '@entities/teams';
+import { saveTeamModal, SaveTeamModal } from '@features/teams';
+import { CellRendererProps, ColumnConfig } from '@ui';
+import { CrudPage } from '@widgets/crud-page';
 
-interface Props {
-  teams: Team[];
-}
-
-const TeamsPage = ({ teams }: Props) => {
-  const onTeamRowClick = ({ row }: TableActionsProps<Team>) => {
-    saveTeamModal.opened({
-      data: row.id,
-    });
-  };
-
-  const onDelete = ({ row }: TableActionsProps<Team>) => {
-    confirm({}).then(() => {
-      teamsModel.events.entityDeleted({ id: row.id });
-    });
-  };
-
+const TeamFlag = ({ value }: CellRendererProps<Flag>) => {
   return (
-    <div>
-      <Teams.Actions.SaveTeamModal />
-      <Box sx={{ display: 'flex', mb: 2 }}>
-        <Teams.Actions.AddTeamButton />
-      </Box>
-      <TeamsTable
-        teams={teams}
-        onRowClick={onTeamRowClick}
-        onEdit={onTeamRowClick}
-        onDelete={onDelete}
-      />
-    </div>
+    <img style={{ height: 64, width: 64 }} src={`${API_BASE_URL}/${value.path}`} alt="team flag" />
   );
 };
 
-export default variant({
-  source: combine({
-    loading: teamsModel.$areEntitiesLoading,
-  }, ({
-    loading,
-  }) => {
-    if (loading) {
-      return 'loading';
-    }
-    return 'ready';
-  }),
-  cases: {
-    loading: () => null,
-    ready: TeamsPage,
+const columns: ColumnConfig[] = [
+  {
+    accessor: 'flag',
+    label: 'Flag',
+    render: TeamFlag,
   },
-  bind: { teams: teamsModel.$entitiesList },
-  hooks: {
-    mounted: teamsModel.effects.getManyFx,
-    unmounted: teamsModel.page.unmounted,
+  {
+    accessor: 'name',
+    label: 'Team',
   },
+  {
+    accessor: 'countryCode',
+    label: 'Code',
+  },
+];
+
+export default CrudPage({
+  resourceModel: teamsModel,
+  renderModal: () => <SaveTeamModal />,
+  tableColumns: columns,
+  modal: saveTeamModal,
 });

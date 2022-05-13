@@ -26,7 +26,7 @@ type ModalOpenedParams = {
   data?: any;
 } | void;
 
-export interface ModalInstance {
+export interface ModalModel {
   opened: Event<ModalOpenedParams>;
   closed: Event<void>;
   initFx: Effect<any, any>;
@@ -35,9 +35,9 @@ export interface ModalInstance {
 
 export const createModal = ({
   name,
-  mapParams = (params) => params,
+  mapParams = (params) => ({ id: params.data }),
   initFx = createEffect(() => {}),
-}: ModalParams): ModalInstance => {
+}: ModalParams): ModalModel => {
   const opened = createEvent<ModalOpenedParams>();
   const closed = createEvent();
   const initModalFx = attach({

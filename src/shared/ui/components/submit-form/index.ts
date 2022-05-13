@@ -1,3 +1,3 @@
-import SubmitForm from 'shared/ui/components/submit-form/SubmitForm';
+import SubmitForm from './SubmitForm';
 
 export default SubmitForm;

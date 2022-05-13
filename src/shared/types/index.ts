@@ -1,2 +1,2 @@
 export * from './routing';
-export * from './data-table';
+export * from '../ui/components/data-table/types';

@@ -1,6 +1,5 @@
 import { bem } from '@lib';
 import { get } from 'lodash';
-import { FC } from 'react';
 import * as React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,22 +8,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { SxProps, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
-import { ColumnConfig, TableActionsProps } from 'shared/types/data-table';
+import { DataTableProps } from './types';
 import TableDefaultActions from './TableDefaultActions';
 import './DataTable.scss';
-
-interface Props<T> {
-  columns: ColumnConfig[];
-  data: T[];
-  Actions?: FC<TableActionsProps<T>>;
-  className?: string;
-  sx?: SxProps;
-  onRowClick?: (props: TableActionsProps<T>) => void;
-  onEdit?: (props: TableActionsProps<T>) => void;
-  onDelete?: (props: TableActionsProps<T>) => void;
-}
 
 const { block, element } = bem('DataTable');
 
@@ -37,7 +25,7 @@ const DataTable = <T extends Record<string, any>>({
   onRowClick,
   onEdit,
   onDelete,
-}: Props<T>) => {
+}: DataTableProps<T>) => {
   const handleRowClick = (row: T) => (event: any) => {
     // TODO Add rows multi select.
     if (onRowClick && event.target.localName !== 'button') {
@@ -57,7 +45,7 @@ const DataTable = <T extends Record<string, any>>({
       }}
       {...block({}, className)}
     >
-      <Table aria-label="simple table" stickyHeader>
+      <Table stickyHeader>
         <TableHead>
           <TableRow>
             {

@@ -24,6 +24,7 @@
       "@pages": ["pages"],
       "@features/*": ["features/*"],
       "@entities/*": ["entities/*"],
+      "@widgets/*": ["widgets/*"],
       "@api": ["shared/api"],
       "@lib": ["shared/lib"],
       "@ui": ["shared/ui"],

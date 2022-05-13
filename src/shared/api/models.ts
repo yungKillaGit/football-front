@@ -36,3 +36,10 @@ export interface Team extends BaseModel {
   region: Region;
   players: Player[];
 }
+
+export interface Tournament extends BaseModel {
+  name: string;
+  startDate: Date;
+  endDate: Date;
+  teams: Team[];
+}
