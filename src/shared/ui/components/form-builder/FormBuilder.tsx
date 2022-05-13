@@ -18,8 +18,10 @@ interface ControllerProps {
 export type FormBuilderProps<InputProps extends FieldComponentProps = FieldComponentProps> = ControllerProps & Omit<FormFieldProps, 'field' | 'children'> & Omit<InputProps, 'field'>;
 
 function create<Props extends FieldComponentProps>(Component: FC<Props>) {
-  return function FormBuilder<InputProps extends FieldComponentProps = Props>({ name, rules, ...rest }: FormBuilderProps<Props | InputProps>) {
-    const componentProps: Props = Object.assign(rest);
+  return function FormBuilder<InputProps extends FieldComponentProps = Props>({
+    name, rules, fullWidth = true, ...rest
+  }: FormBuilderProps<Props | InputProps>) {
+    const componentProps: Props = Object.assign({ ...rest, fullWidth });
     return (
       <Controller
         name={name}
