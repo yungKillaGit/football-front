@@ -1,4 +1,4 @@
-import { createTheme, CSSInterpolation } from '@mui/material';
+import { createTheme, CSSInterpolation } from '@mui/material/styles';
 import { TypographyOptions } from '@mui/material/styles/createTypography';
 
 const palette = {
@@ -12,6 +12,12 @@ const palette = {
 };
 
 const typography: TypographyOptions = {
+  allVariants: {
+    fontFamily: [
+      'Tahoma',
+      'sans-serif',
+    ].join(', '),
+  },
   body1: {
     fontWeight: 500,
     fontSize: '16px',
@@ -63,14 +69,6 @@ export const muiTheme = createTheme({
     MuiButtonBase: {
       defaultProps: {
         disableRipple: true,
-      },
-    },
-    MuiTypography: {
-      styleOverrides: {
-        root: {
-          userSelect: 'none',
-          fontFamily: 'Tahoma, sans-serif',
-        },
       },
     },
     MuiButton: {

@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { TableActionsProps } from '@types';
 import { Button } from '@ui';
 
@@ -25,10 +25,14 @@ const TableDefaultActions = <T extends Record<string, any>>({ onEdit, onDelete, 
     }}
     >
       <Button onClick={handleEdit(row)} variant="outlined">
-        Edit
+        <Typography variant="body2">
+          Edit
+        </Typography>
       </Button>
       <Button onClick={handleDelete(row)} sx={{ ml: 1 }} variant="outlined">
-        Delete
+        <Typography variant="body2">
+          Delete
+        </Typography>
       </Button>
     </Box>
   );

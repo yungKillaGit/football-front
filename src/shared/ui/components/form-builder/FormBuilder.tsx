@@ -17,11 +17,11 @@ interface ControllerProps {
 
 export type FormBuilderProps<InputProps extends FieldComponentProps = FieldComponentProps> = ControllerProps & Omit<FormFieldProps, 'field' | 'children'> & Omit<InputProps, 'field'>;
 
-function create<Props extends FieldComponentProps>(Component: FC<Props>) {
+function create<Props extends FieldComponentProps>(Component: FC<Props>, defaultProps: Partial<FieldComponentProps> = { fullWidth: true }) {
   return function FormBuilder<InputProps extends FieldComponentProps = Props>({
-    name, rules, fullWidth = true, ...rest
+    name, rules, ...rest
   }: FormBuilderProps<Props | InputProps>) {
-    const componentProps: Props = Object.assign({ ...rest, fullWidth });
+    const componentProps: Props = Object.assign({ ...defaultProps, ...rest });
     return (
       <Controller
         name={name}
@@ -53,6 +53,6 @@ function create<Props extends FieldComponentProps>(Component: FC<Props>) {
 
 export const FormBuilder = {
   Text: create(TextInput),
-  Select: create(SelectInput),
+  Select: create(SelectInput, { fullWidth: false }),
   Date: create(DateInput),
 };
