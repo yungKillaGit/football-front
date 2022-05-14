@@ -6,21 +6,11 @@ import {
 } from '@api';
 import { teamsModel } from '@entities/teams';
 import { createForm } from '@lib';
-import { createModal, ModalState } from '@ui';
+import { createModal } from '@ui';
 import { createEvent, sample, split } from 'effector';
 import { teamPlayersModel } from './team-players';
 
-const mapParams = (modalData: ModalState) => {
-  return {
-    id: modalData.data,
-  };
-};
-
-export const saveTeamModal = createModal({
-  name: 'save-team',
-  initFx: teamsModel.effects.getOneFx,
-  mapParams,
-});
+export const saveTeamModal = createModal({ name: 'save-team' });
 
 teamPlayersModel.$teamPlayers.reset(saveTeamModal.closed);
 

@@ -1,6 +1,7 @@
-import { tournamentsModel } from '@entities/tournaments';
 import { createForm } from '@lib';
-import { createModal } from '@ui';
+import {
+  createEvent, createStore, sample, split,
+} from 'effector';
 
 export interface SaveTournamentFormValues {
   name: string;
@@ -8,9 +9,56 @@ export interface SaveTournamentFormValues {
   endDate: Date;
 }
 
-export const saveTournamentModal = createModal({
-  name: 'save-tournament',
-  initFx: tournamentsModel.effects.getOneFx,
+interface TeamParticipationChanged {
+  selected: boolean;
+  id: number;
+}
+
+const teamAdded = createEvent<TeamParticipationChanged>();
+const teamDeleted = createEvent<TeamParticipationChanged>();
+const teamParticipationChanged = createEvent<TeamParticipationChanged>();
+
+const $tournamentTeams = createStore<number[]>([]);
+
+sample({
+  clock: teamAdded,
+  target: $tournamentTeams,
+  source: $tournamentTeams,
+  fn: (state, payload) => {
+    return {
+      ...state,
+      ...[payload.id],
+    };
+  },
 });
 
-export const saveTournamentModel = createForm<SaveTournamentFormValues>();
+sample({
+  clock: teamDeleted,
+  target: $tournamentTeams,
+  source: $tournamentTeams,
+  fn: (state, payload) => {
+    return state.filter((x) => x !== payload.id);
+  },
+});
+
+split({
+  source: teamParticipationChanged,
+  match: {
+    added: ({ selected }: TeamParticipationChanged) => selected,
+    deleted: ({ selected }: TeamParticipationChanged) => !selected,
+  },
+  cases: {
+    added: teamAdded,
+    deleted: teamDeleted,
+  },
+});
+
+const formEvents = createForm<SaveTournamentFormValues>().events;
+
+export const saveTournamentModel = {
+  events: {
+    ...formEvents,
+    teamParticipationChanged,
+  },
+  $tournamentTeams,
+};

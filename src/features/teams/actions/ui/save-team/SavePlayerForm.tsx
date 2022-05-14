@@ -6,7 +6,7 @@ import { CurrentPlayerGate, SavePlayerFormValues, savePlayerModel } from '../../
 import { PlayerInfo } from '../../model/team-players';
 
 interface Props {
-  currentPlayer: PlayerInfo | null;
+  currentPlayer?: PlayerInfo;
 }
 
 const SavePlayerForm = ({ currentPlayer }: Props) => {

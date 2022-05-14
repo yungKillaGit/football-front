@@ -4,10 +4,8 @@ import {
   sample,
   Store,
   Event,
-  Effect,
   attach,
 } from 'effector';
-import { createEffect } from 'effector/compat';
 
 export interface ModalState {
   open: boolean;
@@ -18,8 +16,7 @@ export interface ModalState {
 
 interface ModalParams {
   name: string;
-  initFx?: Effect<any, any>;
-  mapParams?: (params: ModalState) => any;
+  defaultState?: Partial<ModalState>;
 }
 
 type ModalOpenedParams = {
@@ -27,38 +24,25 @@ type ModalOpenedParams = {
 } | void;
 
 export interface ModalModel {
+  $modal: Store<ModalState>;
   opened: Event<ModalOpenedParams>;
   closed: Event<void>;
-  initFx: Effect<any, any>;
-  $modal: Store<ModalState>;
+  initialized: Event<void>;
 }
 
 export const createModal = ({
   name,
-  mapParams = (params) => ({ id: params.data }),
-  initFx = createEffect(() => {}),
+  defaultState,
 }: ModalParams): ModalModel => {
   const opened = createEvent<ModalOpenedParams>();
   const closed = createEvent();
-  const initModalFx = attach({
-    effect: initFx,
-    mapParams,
-  });
+  const initialized = createEvent();
 
   const $modal = createStore<ModalState>({
     open: false,
     name,
     loading: true,
-  });
-
-  sample({
-    clock: initModalFx.done,
-    source: $modal,
-    fn: (state) => ({
-      ...state,
-      loading: false,
-    }),
-    target: $modal,
+    ...defaultState,
   });
 
   const openedFn = (state: ModalState, eventParams: ModalOpenedParams) => {
@@ -72,20 +56,20 @@ export const createModal = ({
   };
 
   sample({
-    clock: opened,
+    clock: initialized,
     source: $modal,
-    fn: openedFn,
+    fn: (state) => ({
+      ...state,
+      loading: false,
+    }),
     target: $modal,
   });
 
   sample({
     clock: opened,
     source: $modal,
-    fn: (state) => state,
-    filter: (state) => {
-      return Boolean(state.data);
-    },
-    target: initModalFx,
+    fn: openedFn,
+    target: $modal,
   });
 
   sample({
@@ -104,6 +88,6 @@ export const createModal = ({
     $modal,
     opened,
     closed,
-    initFx: initModalFx,
+    initialized,
   };
 };

@@ -1,9 +1,9 @@
 import { isNumberOrString } from '@lib';
 import { ModalModel } from '@ui';
-import { sample } from 'effector';
+import { createStore, sample, Store } from 'effector';
 import { useStore } from 'effector-react';
 import { FC, useEffect } from 'react';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 import Modal from './Modal';
 
@@ -11,22 +11,26 @@ export interface ModalContentProps<T extends unknown = number> {
   modalData: T | null;
 }
 
-export interface ModalContainerProps {
+export interface ModalContainerProps<ModalProps> {
   routing?: boolean;
   getTitle?: <T>(modalData?: T) => string;
-  ModalContent: FC<any>;
+  ModalContent: FC<ModalProps>;
   modal: ModalModel;
+  $modalProps?: Store<ModalProps>;
 }
 
-function ModalContainer({
+function ModalContainer<ModalProps>({
   getTitle = () => '',
   ModalContent,
   routing = true,
   modal,
-}: ModalContainerProps) {
+  $modalProps,
+}: ModalContainerProps<ModalProps>) {
+  const modalState = useStore(modal.$modal);
+
   const {
     data, open, name, loading,
-  } = useStore(modal.$modal);
+  } = modalState;
 
   const [modalSearchParams, setModalSearchParams] = useSearchParams();
 
@@ -66,6 +70,8 @@ function ModalContainer({
     }
   }, [data, modal, modalSearchParams, name, open, routing, setModalSearchParams]);
 
+  const modalProps = useStore($modalProps || createStore({} as ModalProps));
+
   if (loading || !open) {
     return null;
   }
@@ -76,7 +82,7 @@ function ModalContainer({
       title={getTitle(modalData)}
       onClose={onClose}
     >
-      <ModalContent modalData={modalData} />
+      <ModalContent {...modalProps} />
     </Modal>
   );
 }

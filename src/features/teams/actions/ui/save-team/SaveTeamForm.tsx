@@ -13,7 +13,7 @@ import { teamPlayersModel } from '../../model/team-players';
 import TeamPlayersActions from './TeamPlayersActions';
 
 interface Props {
-  currentTeam: Team | null;
+  currentTeam?: Team;
 }
 
 const SaveTeamForm = ({ currentTeam }: Props) => {

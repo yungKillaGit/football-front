@@ -1,12 +1,19 @@
 import { ReactNode } from 'react';
 import { ControllerRenderProps } from 'react-hook-form';
 
-export interface FieldConfig extends ControllerRenderProps {
+export interface BaseFieldConfig {
+  onChange: (value: any) => void;
+  value: any;
+}
+
+export interface FieldConfig extends BaseFieldConfig {
   id: string;
 }
 
+export interface InputConfig extends Partial<ControllerRenderProps> {}
+
 export interface FieldComponentProps<ValueType = string> {
-  field: FieldConfig;
+  field: FieldConfig | BaseFieldConfig;
   className?: string;
   fullWidth?: boolean;
 }
