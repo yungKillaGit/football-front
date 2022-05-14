@@ -1,6 +1,8 @@
 import {
   ApiResponse,
   BaseModel,
+  EmptyHandlerParams,
+  HandlerParams,
   IdPayload,
   ResourceApi,
 } from '@api';
@@ -25,14 +27,14 @@ export interface ResourceModel<Entity extends BaseModel, CreateDto, UpdateDto> {
   page: PageModel;
   events: {
     allEntitiesLoaded: Event<void>;
-    entityDeleted: Event<IdPayload>;
+    entityDeleted: Event<HandlerParams<IdPayload>>;
   };
   effects: {
-    createOneFx: Effect<CreateDto, ApiResponse<Entity>, Error>;
-    deleteOneFx: Effect<IdPayload, ApiResponse<Entity>, Error>;
-    updateOneFx: Effect<UpdateDto, ApiResponse<Entity>, Error>;
-    getOneFx: Effect<IdPayload, ApiResponse<Entity>, Error>;
-    getManyFx: Effect<void, ApiResponse<Entity[]>, Error>;
+    createOneFx: Effect<HandlerParams<CreateDto>, ApiResponse<Entity>, Error>;
+    deleteOneFx: Effect<HandlerParams<IdPayload>, ApiResponse<Entity>, Error>;
+    updateOneFx: Effect<HandlerParams<UpdateDto>, ApiResponse<Entity>, Error>;
+    getOneFx: Effect<HandlerParams<IdPayload>, ApiResponse<Entity>, Error>;
+    getManyFx: Effect<EmptyHandlerParams, ApiResponse<Entity[]>, Error>;
   };
   $entities: Store<Record<number, Entity>>;
   $entitiesList: Store<Entity[]>;
@@ -46,7 +48,7 @@ export const createResource = <Entity extends BaseModel, CreateDto, UpdateDto>({
   const page = createPage({ name });
 
   const allEntitiesLoaded = createEvent();
-  const entityDeleted = createEvent<IdPayload>();
+  const entityDeleted = createEvent<HandlerParams<IdPayload>>();
 
   const createOneFx = createEffect(resourceApi.createOne);
   const deleteOneFx = createEffect(resourceApi.deleteOne);

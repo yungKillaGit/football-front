@@ -1,0 +1,10 @@
+.SaveTournamentForm {
+  &__dates {
+    display: flex;
+    justify-content: space-between;
+
+    & > div:not(:first-child) {
+      margin-left: 16px;
+    }
+  }
+}

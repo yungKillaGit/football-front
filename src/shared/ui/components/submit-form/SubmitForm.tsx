@@ -13,6 +13,7 @@ interface Props<FieldValues> {
   form: UseFormReturn<FieldValues>;
   formModel: FormModel<FieldValues>;
   canSubmit?: boolean;
+  className?: string;
 }
 
 const { block, element } = bem('SubmitForm');
@@ -23,6 +24,7 @@ const SubmitForm = <T extends FormModelValues>({
   pending,
   formModel,
   canSubmit = true,
+  className,
 }: Props<T>) => {
   const { handleSubmit, formState } = form;
 
@@ -32,7 +34,7 @@ const SubmitForm = <T extends FormModelValues>({
 
   return (
     <FormProvider {...form}>
-      <form {...block()}>
+      <form {...block(className)}>
         {children}
         <div {...element('actions')}>
           <Button

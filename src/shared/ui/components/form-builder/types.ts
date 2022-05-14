@@ -16,6 +16,7 @@ export interface FieldComponentProps<ValueType = string> {
   field: FieldConfig | BaseFieldConfig;
   className?: string;
   fullWidth?: boolean;
+  disabled?: boolean;
 }
 
 export interface FormFieldProps<FieldValue = any> {

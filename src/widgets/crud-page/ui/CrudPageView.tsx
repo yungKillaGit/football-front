@@ -29,7 +29,7 @@ const CrudPageView = <Entity extends BaseModel, CreateDto, UpdateDto>({
 
   const handleDelete = ({ row }: TableActionsProps<Entity>) => {
     confirm({}).then(() => {
-      resourceModel.events.entityDeleted({ id: row.id });
+      resourceModel.events.entityDeleted({ payload: { id: row.id } });
     });
   };
 

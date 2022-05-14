@@ -1,64 +1,72 @@
+import { CreateTournamentDto, UpdateTournamentDto } from '@api';
+import { tournamentsModel } from '@entities/tournaments';
 import { createForm } from '@lib';
 import {
-  createEvent, createStore, sample, split,
+  createEvent, sample, split,
 } from 'effector';
+import { saveTournamentModal } from './save-tournament-modal';
+import { tournamentTeamsModel } from './tournament-teams';
 
 export interface SaveTournamentFormValues {
   name: string;
   startDate: Date;
   endDate: Date;
+  id?: number;
 }
 
-interface TeamParticipationChanged {
-  selected: boolean;
-  id: number;
-}
+const tournamentAdded = createEvent<SaveTournamentFormValues>();
+const tournamentEdited = createEvent<SaveTournamentFormValues>();
 
-const teamAdded = createEvent<TeamParticipationChanged>();
-const teamDeleted = createEvent<TeamParticipationChanged>();
-const teamParticipationChanged = createEvent<TeamParticipationChanged>();
+export const saveTournamentModel = createForm<SaveTournamentFormValues>();
 
-const $tournamentTeams = createStore<number[]>([]);
+tournamentTeamsModel.$tournamentTeams.reset(saveTournamentModal.closed);
+
+split({
+  source: saveTournamentModel.events.formValidated,
+  match: (params: SaveTournamentFormValues) => {
+    if (params.id) {
+      return 'edited';
+    }
+    return 'added';
+  },
+  cases: {
+    added: tournamentAdded,
+    edited: tournamentEdited,
+  },
+});
 
 sample({
-  clock: teamAdded,
-  target: $tournamentTeams,
-  source: $tournamentTeams,
-  fn: (state, payload) => {
+  clock: tournamentAdded,
+  source: tournamentTeamsModel.$tournamentTeams,
+  target: tournamentsModel.effects.createOneFx,
+  fn: (teams, form) => {
+    const dto: CreateTournamentDto = {
+      ...form,
+      participatingTeams: teams,
+    };
     return {
-      ...state,
-      ...[payload.id],
+      payload: dto,
     };
   },
 });
 
 sample({
-  clock: teamDeleted,
-  target: $tournamentTeams,
-  source: $tournamentTeams,
-  fn: (state, payload) => {
-    return state.filter((x) => x !== payload.id);
+  clock: tournamentEdited,
+  source: tournamentTeamsModel.$tournamentTeams,
+  target: tournamentsModel.effects.updateOneFx,
+  fn: (teams, form) => {
+    const dto: UpdateTournamentDto = {
+      ...form,
+      id: form.id as number,
+      participatingTeams: teams,
+    };
+    return {
+      payload: dto,
+    };
   },
 });
 
-split({
-  source: teamParticipationChanged,
-  match: {
-    added: ({ selected }: TeamParticipationChanged) => selected,
-    deleted: ({ selected }: TeamParticipationChanged) => !selected,
-  },
-  cases: {
-    added: teamAdded,
-    deleted: teamDeleted,
-  },
+sample({
+  clock: [tournamentsModel.effects.createOneFx.done, tournamentsModel.effects.updateOneFx.done],
+  target: saveTournamentModal.closed,
 });
-
-const formEvents = createForm<SaveTournamentFormValues>().events;
-
-export const saveTournamentModel = {
-  events: {
-    ...formEvents,
-    teamParticipationChanged,
-  },
-  $tournamentTeams,
-};

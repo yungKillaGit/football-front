@@ -1,4 +1,6 @@
-import { api, ApiResponse } from './api';
+import {
+  api, ApiResponse, EmptyHandlerParams, HandlerParams,
+} from './api';
 import { BaseModel } from './models';
 
 interface ResourceApiParams {
@@ -10,45 +12,35 @@ export interface IdPayload {
 }
 
 export interface ResourceApi<Entity, CreateDto, UpdateDto> {
-  createOne: (payload: CreateDto) => Promise<ApiResponse<Entity>>;
-  deleteOne: (payload: IdPayload) => Promise<ApiResponse<Entity>>;
-  updateOne: (payload: UpdateDto) => Promise<ApiResponse<Entity>>;
-  getOne: (payload: IdPayload) => Promise<ApiResponse<Entity>>;
-  getMany: () => Promise<ApiResponse<Entity[]>>;
+  createOne: (params: HandlerParams<CreateDto>) => Promise<ApiResponse<Entity>>;
+  deleteOne: (params: HandlerParams<IdPayload>) => Promise<ApiResponse<Entity>>;
+  updateOne: (params: HandlerParams<UpdateDto>) => Promise<ApiResponse<Entity>>;
+  getOne: (params: HandlerParams<IdPayload>) => Promise<ApiResponse<Entity>>;
+  getMany: (params?: EmptyHandlerParams) => Promise<ApiResponse<Entity[]>>;
 }
 
 export const createResourceApi = <Entity extends BaseModel, CreateDto, UpdateDto extends IdPayload>({
   endpoint,
 }: ResourceApiParams): ResourceApi<Entity, CreateDto, UpdateDto> => {
-  const createOne = (payload: CreateDto) => {
-    return api.post<Entity>(endpoint, {
-      data: payload,
-    });
-  };
-
-  const deleteOne = (payload: IdPayload) => {
-    return api.delete<Entity>(`${endpoint}/${payload.id}`);
-  };
-
-  const updateOne = (payload: UpdateDto) => {
-    return api.put<Entity>(`${endpoint}/${payload.id}`, {
-      data: payload,
-    });
-  };
-
-  const getOne = (payload: IdPayload) => {
-    return api.get<Entity>(`${endpoint}/${payload.id}`);
-  };
-
-  const getMany = () => {
-    return api.get<Entity[]>(endpoint);
-  };
-
   return {
-    createOne,
-    deleteOne,
-    updateOne,
-    getOne,
-    getMany,
+    createOne: ({ payload }) => {
+      return api.post<Entity>(endpoint, {
+        data: payload,
+      });
+    },
+    deleteOne: ({ payload }) => {
+      return api.delete<Entity>(`${endpoint}/${payload.id}`);
+    },
+    updateOne: ({ payload }) => {
+      return api.put<Entity>(`${endpoint}/${payload.id}`, {
+        data: payload,
+      });
+    },
+    getOne: ({ payload, query }) => {
+      return api.get<Entity>(`${endpoint}/${payload.id}`, { query });
+    },
+    getMany: (params = {}) => {
+      return api.get<Entity[]>(endpoint, params);
+    },
   };
 };

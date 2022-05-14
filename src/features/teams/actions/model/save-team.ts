@@ -72,7 +72,9 @@ sample({
     if (formValues.flag) {
       dto.flagId = formValues.flag.id;
     }
-    return dto;
+    return {
+      payload: dto,
+    };
   },
 });
 
@@ -94,6 +96,8 @@ sample({
     if (formValues.flag) {
       dto.flagId = formValues.flag.id;
     }
-    return dto;
+    return {
+      payload: dto,
+    };
   },
 });

@@ -50,7 +50,7 @@ const DataTable = <T extends Record<string, any>>({
           <TableRow>
             {
               columns.map((column) => (
-                <TableCell key={column.accessor}>
+                <TableCell key={column.accessor} sx={column.sx}>
                   <Typography variant="body1">
                     {column.label}
                   </Typography>
@@ -76,7 +76,7 @@ const DataTable = <T extends Record<string, any>>({
             >
               {
                 columns.map((column, columnIndex) => (
-                  <TableCell key={`${column.accessor}-${rowIndex}-${columnIndex}`}>
+                  <TableCell key={`${column.accessor}-${rowIndex}-${columnIndex}`} sx={column.sx}>
                     {
                       column.render
                         ? column.render({ value: get(row, column.accessor), row })

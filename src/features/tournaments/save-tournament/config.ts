@@ -1,0 +1,1 @@
+export const MAX_TOURNAMENT_TEAMS_NUMBER = 24;

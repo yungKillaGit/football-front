@@ -16,6 +16,7 @@ export interface ColumnConfig {
   accessor: string;
   label?: string;
   render?: (props: CellRendererProps) => ReactNode;
+  sx?: SxProps;
 }
 
 export interface DataTableProps<Entity> {

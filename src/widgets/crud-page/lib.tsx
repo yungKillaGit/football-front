@@ -41,7 +41,7 @@ export const CrudPage = <Entity extends BaseModel, CreateDto, UpdateDto>({
       ),
     },
     hooks: {
-      mounted: resourceModel.effects.getManyFx,
+      mounted: resourceModel.effects.getManyFx.prepend(() => ({})),
       unmounted: resourceModel.page.unmounted,
     },
   });

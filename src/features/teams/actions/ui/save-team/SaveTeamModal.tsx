@@ -22,7 +22,9 @@ export default EffectorModal({
     sample({
       clock: model.opened,
       source: model.$modal,
-      fn: (state) => ({ id: state.data }),
+      fn: (state) => ({
+        payload: { id: state.data },
+      }),
       target: teamsModel.effects.getOneFx,
       filter: (state) => state.data,
     });
