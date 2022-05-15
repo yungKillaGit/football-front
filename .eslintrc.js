@@ -51,7 +51,8 @@ module.exports = {
     'no-undef': 'off',
     'no-redeclare': 'off',
     'no-nested-ternary': 'off',
-    'prefer-object-spread': 'off'
+    'prefer-object-spread': 'off',
+    'import/no-extraneous-dependencies': 'off',
   },
   settings: {
     'import/resolver': {
