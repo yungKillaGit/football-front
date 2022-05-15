@@ -26,17 +26,18 @@ const formValidated = savePlayerModel.events.formValidated.map((x) => ({
 
 sample({
   clock: formValidated,
-  fn: (combinedSources, clockData) => {
-    const teamPlayersList = combinedSources[0] as PlayerInfo[];
-    const currentPlayer = combinedSources[1] as PlayerInfo | null;
-    return {
-      ...clockData,
-      displayId: currentPlayer ? currentPlayer.displayId : teamPlayersList.length + 1,
-    };
+  source: {
+    players: teamPlayersModel.$teamPlayersList,
+    existingPlayer: CurrentPlayerGate.state,
   },
-  source: [teamPlayersModel.$teamPlayersList, CurrentPlayerGate.state],
   target: [
     teamPlayersModel.events.playerSaved,
     savePlayerModal.closed,
   ],
+  fn: ({ players, existingPlayer }, clockData) => {
+    return {
+      ...clockData,
+      displayId: existingPlayer?.displayId ? existingPlayer.displayId : players.length + 1,
+    };
+  },
 });

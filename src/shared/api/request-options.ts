@@ -7,11 +7,17 @@ export interface SortParam {
   direction: 'ASC' | 'DESC';
 }
 
-export type QueryParam = 'search' | 'sort';
+export interface JoinParam {
+  relation: string;
+  fields?: string[];
+}
+
+export type QueryParam = 'search' | 'sort' | 'join';
 
 export interface QueryParams {
   search: SearchParam;
   sort: SortParam | SortParam[];
+  join: JoinParam | JoinParam[];
 }
 
 export type QueryBuilder = {
@@ -33,5 +39,13 @@ export const queryBuilder: QueryBuilder = {
   search: (param) => `s=${JSON.stringify(param)}`,
   sort: (param) => {
     return processParamArray((value: SortParam) => `sort=${value.field},${value.direction}`, param);
+  },
+  join: (param) => {
+    return processParamArray((value: JoinParam) => {
+      if (value.fields && value.fields.length > 0) {
+        return `join=${value.relation}||${value.fields.join(',')}`;
+      }
+      return `join=${value.relation}`;
+    }, param);
   },
 };

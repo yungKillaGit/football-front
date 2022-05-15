@@ -92,7 +92,7 @@ export const createResource = <Entity extends BaseModel, CreateDto, UpdateDto>({
     target: $entitiesList,
     fn: (state, payload) => {
       const existingIndex = state.findIndex((x) => x.id === payload.response.id);
-      if (existingIndex) {
+      if (existingIndex !== -1) {
         return replace(state, existingIndex, payload.response);
       }
       return state;

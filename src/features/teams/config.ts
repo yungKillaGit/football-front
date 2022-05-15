@@ -1,1 +1,1 @@
-export const MAX_TEAM_PLAYERS_NUMBER = 23;
+export const MAX_TEAM_PLAYERS_NUMBER = 1;

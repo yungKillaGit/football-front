@@ -24,9 +24,19 @@ export default EffectorModal({
       source: model.$modal,
       fn: (state) => ({
         payload: { id: state.data },
+        query: {
+          join: [
+            {
+              relation: 'players',
+            },
+            {
+              relation: 'players.position',
+            },
+          ],
+        },
       }),
       target: teamsModel.effects.getOneFx,
-      filter: (state) => state.data,
+      filter: (state) => Boolean(state.data),
     });
 
     return teamsModel.effects.getOneFx.done;
