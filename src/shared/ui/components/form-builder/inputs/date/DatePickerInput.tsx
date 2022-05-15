@@ -5,6 +5,10 @@ const DatePickerInput = (textFieldProps: TextFieldProps, ref: ForwardedRef<HTMLD
   return (
     <TextField
       {...textFieldProps}
+      inputProps={{
+        ...textFieldProps.inputProps,
+        placeholder: 'dd.mm.yyyy',
+      }}
     />
   );
 };

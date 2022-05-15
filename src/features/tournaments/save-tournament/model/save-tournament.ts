@@ -1,12 +1,11 @@
 import {
-  CreateTournamentDto, EmptyHandlerParams, teamsApi, UpdateTournamentDto,
+  CreateTournamentDto, UpdateTournamentDto,
 } from '@api';
 import { teamsModel } from '@entities/teams';
 import { tournamentsModel } from '@entities/tournaments';
 import { createForm } from '@lib';
 import {
-  createEffect,
-  createEvent, restore,
+  createEvent,
   sample,
   split,
 } from 'effector';

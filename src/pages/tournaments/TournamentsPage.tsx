@@ -1,11 +1,12 @@
 import { Tournament } from '@api';
 import { tournamentsModel } from '@entities/tournaments';
 import { saveTournamentModal, SaveTournamentModal } from '@features/tournaments';
+import { formatDate } from '@lib';
 import { CellRendererProps, ColumnConfig } from '@ui';
 import { CrudPage } from '@widgets/crud-page';
 
 const TournamentDate = ({ row }: CellRendererProps<any, Tournament>) => {
-  return `${row.startDate.toString()} - ${row.endDate.toString()}`;
+  return `${formatDate(row.startDate)} - ${formatDate(row.endDate)}`;
 };
 
 const columns: ColumnConfig[] = [

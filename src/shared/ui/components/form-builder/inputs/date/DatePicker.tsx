@@ -1,7 +1,9 @@
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker as MuiDatePicker } from '@mui/x-date-pickers/DatePicker';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
+import ruLocale from 'date-fns/locale/ru';
+
 import { FieldComponentProps } from '../../types';
 import DatePickerInput from './DatePickerInput';
 
@@ -11,21 +13,22 @@ const DatePicker = ({ field: { onChange, value, ...inputConfig } }: FieldCompone
   };
 
   const [open, setOpen] = useState(false);
-
   const handleOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
       <MuiDatePicker
+        mask="__.__.____"
         renderInput={(params) => {
           return (
-            <DatePickerInput {...params} />
+            <DatePickerInput
+              {...params}
+            />
           );
         }}
         onChange={handleChange}

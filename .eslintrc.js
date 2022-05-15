@@ -53,6 +53,7 @@ module.exports = {
     'no-nested-ternary': 'off',
     'prefer-object-spread': 'off',
     'import/no-extraneous-dependencies': 'off',
+    'react/destructuring-assignment': 'off',
   },
   settings: {
     'import/resolver': {

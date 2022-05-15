@@ -5,3 +5,4 @@ export * from './base-type-guards';
 export * from './page-model';
 export * from './resource-model';
 export * from './common';
+export * from './dates';
