@@ -7,7 +7,6 @@ import {
   ResourceApi,
 } from '@api';
 import {
-  combine,
   createEffect,
   createEvent,
   createStore,
@@ -36,7 +35,6 @@ export interface ResourceModel<Entity extends BaseModel, CreateDto, UpdateDto> {
     getOneFx: Effect<HandlerParams<IdPayload>, ApiResponse<Entity>, Error>;
     getManyFx: Effect<EmptyHandlerParams, ApiResponse<Entity[]>, Error>;
   };
-  $entities: Store<Record<number, Entity>>;
   $entitiesList: Store<Entity[]>;
   $areEntitiesLoading: Store<boolean>;
 }
@@ -56,8 +54,9 @@ export const createResource = <Entity extends BaseModel, CreateDto, UpdateDto>({
   const getOneFx = createEffect(resourceApi.getOne);
   const getManyFx = createEffect(resourceApi.getMany);
 
-  const $entities = createStore<Record<number, Entity>>({});
-  const $entitiesList = combine($entities, (entities) => Object.values(entities));
+  // const $entities = createStore<Record<number, Entity>>({}).reset(page.unmounted);
+  const $entitiesList = createStore<Entity[]>([]);
+
   const $areEntitiesLoading = createStore(true).reset(page.unmounted);
 
   const events = {
@@ -75,22 +74,9 @@ export const createResource = <Entity extends BaseModel, CreateDto, UpdateDto>({
 
   sample({
     clock: getManyFx.doneData,
-    source: $entities,
-    target: $entities,
+    source: $entitiesList,
+    target: $entitiesList,
     fn: (state, payload) => {
-      return payload.response.reduce((acc, entity) => {
-        return {
-          ...acc,
-          [entity.id]: entity,
-        };
-      }, {});
-    },
-  });
-
-  sample({
-    clock: getManyFx.doneData,
-    target: [$entitiesList, allEntitiesLoaded],
-    fn: (payload) => {
       return payload.response;
     },
   });
@@ -102,24 +88,36 @@ export const createResource = <Entity extends BaseModel, CreateDto, UpdateDto>({
   });
 
   sample({
-    clock: [getOneFx.doneData, createOneFx.doneData, updateOneFx.doneData],
-    source: $entities,
-    target: $entities,
+    clock: [getOneFx.doneData, updateOneFx.doneData],
+    source: $entitiesList,
+    target: $entitiesList,
     fn: (state, payload) => {
-      return {
+      const existingIndex = state.findIndex((x) => x.id === payload.response.id);
+      if (existingIndex) {
+        return state.splice(existingIndex, 1, payload.response);
+      }
+      return state;
+    },
+  });
+
+  sample({
+    clock: [createOneFx.doneData],
+    source: $entitiesList,
+    target: $entitiesList,
+    fn: (state, payload) => {
+      return [
         ...state,
-        [payload.response.id]: payload.response,
-      };
+        payload.response,
+      ];
     },
   });
 
   sample({
     clock: deleteOneFx.doneData,
-    source: $entities,
-    target: $entities,
+    source: $entitiesList,
+    target: $entitiesList,
     fn: (state, payload) => {
-      const { [payload.response.id]: _, ...newState } = state;
-      return newState;
+      return state.filter((x) => x.id !== payload.response.id);
     },
   });
 
@@ -132,7 +130,6 @@ export const createResource = <Entity extends BaseModel, CreateDto, UpdateDto>({
     page,
     events,
     effects,
-    $entities,
     $entitiesList,
     $areEntitiesLoading,
   };

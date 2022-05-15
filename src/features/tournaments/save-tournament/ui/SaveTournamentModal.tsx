@@ -13,10 +13,10 @@ const SaveTournamentModal = EffectorModal({
   View: SaveTournamentForm,
   getTitle: (modalData) => (modalData ? 'Edit tournament' : 'Add tournament'),
   modal: saveTournamentModal,
-  $modalProps: combine(saveTournamentModal.$modal, tournamentsModel.$entities, ({ data }, tournaments) => {
+  $modalProps: combine(saveTournamentModal.$modal, tournamentsModel.$entitiesList, ({ data }, tournaments) => {
     if (data) {
       return {
-        tournament: tournaments[data],
+        tournament: tournaments.find((x) => x.id === data),
       };
     }
     return {};

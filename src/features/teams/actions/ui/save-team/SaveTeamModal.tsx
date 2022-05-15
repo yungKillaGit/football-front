@@ -4,10 +4,10 @@ import { combine, sample } from 'effector';
 import { saveTeamModal } from '../../model';
 import SaveTeamForm from './SaveTeamForm';
 
-const $modalProps = combine(saveTeamModal.$modal, teamsModel.$entities, ({ data }, teams) => {
+const $modalProps = combine(saveTeamModal.$modal, teamsModel.$entitiesList, ({ data }, teams) => {
   if (data) {
     return {
-      currentTeam: teams[data],
+      currentTeam: teams.find((x) => x.id === data),
     };
   }
   return {};
