@@ -1,12 +1,11 @@
-import { teamsModel } from '@entities/teams';
 import {
   attach, combine, sample,
 } from 'effector';
 
 import { tournamentsModel } from '@entities/tournaments';
 import { EffectorModal } from '@ui';
-import { QueryParams } from '../../../../shared/api/request-options';
 import { saveTournamentModal } from '../model/save-tournament-modal';
+import { tournamentTeamsModel } from '../model/tournament-teams';
 import SaveTournamentForm from './form/SaveTournamentForm';
 
 const SaveTournamentModal = EffectorModal({
@@ -22,25 +21,18 @@ const SaveTournamentModal = EffectorModal({
     return {};
   }),
   onInit: (model) => {
-    const teamsQuery: Partial<QueryParams> = {
-      sort: {
-        field: 'name',
-        direction: 'ASC',
-      },
-    };
-
     const initFx = attach({
       source: model.$modal,
       effect: ({ data }) => {
         if (data) {
           return Promise.all([
-            teamsModel.effects.getManyFx({ query: teamsQuery }),
+            tournamentTeamsModel.effects.getTeamsFx(),
             tournamentsModel.effects.getOneFx({
               payload: { id: data },
             }),
           ]);
         }
-        return teamsModel.effects.getManyFx({ query: teamsQuery });
+        return tournamentTeamsModel.effects.getTeamsFx();
       },
     });
 

@@ -15,6 +15,7 @@ import {
   Effect,
   Store,
 } from 'effector';
+import { replace } from './common';
 import { createPage, PageModel } from './page-model';
 
 interface ResourceModelParams<Entity, CreateDto, UpdateDto> {
@@ -54,9 +55,7 @@ export const createResource = <Entity extends BaseModel, CreateDto, UpdateDto>({
   const getOneFx = createEffect(resourceApi.getOne);
   const getManyFx = createEffect(resourceApi.getMany);
 
-  // const $entities = createStore<Record<number, Entity>>({}).reset(page.unmounted);
-  const $entitiesList = createStore<Entity[]>([]);
-
+  const $entitiesList = createStore<Entity[]>([]).reset(page.unmounted);
   const $areEntitiesLoading = createStore(true).reset(page.unmounted);
 
   const events = {
@@ -75,7 +74,7 @@ export const createResource = <Entity extends BaseModel, CreateDto, UpdateDto>({
   sample({
     clock: getManyFx.doneData,
     source: $entitiesList,
-    target: $entitiesList,
+    target: [$entitiesList, allEntitiesLoaded],
     fn: (state, payload) => {
       return payload.response;
     },
@@ -94,7 +93,7 @@ export const createResource = <Entity extends BaseModel, CreateDto, UpdateDto>({
     fn: (state, payload) => {
       const existingIndex = state.findIndex((x) => x.id === payload.response.id);
       if (existingIndex) {
-        return state.splice(existingIndex, 1, payload.response);
+        return replace(state, existingIndex, payload.response);
       }
       return state;
     },

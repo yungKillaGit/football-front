@@ -29,7 +29,7 @@ const TeamParticipation = (currentTeams: number[], onChange: (row: Team) => (val
 };
 
 const TournamentTeams = () => {
-  const allTeams = useStore(teamsModel.$entitiesList);
+  const allTeams = useStore(tournamentTeamsModel.$teams);
   const currentTeams = useStore(tournamentTeamsModel.$tournamentTeams);
 
   const addTeamToTournament = (row: Team) => (value: boolean) => {

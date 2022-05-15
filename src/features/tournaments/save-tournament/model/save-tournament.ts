@@ -1,8 +1,14 @@
-import { CreateTournamentDto, UpdateTournamentDto } from '@api';
+import {
+  CreateTournamentDto, EmptyHandlerParams, teamsApi, UpdateTournamentDto,
+} from '@api';
+import { teamsModel } from '@entities/teams';
 import { tournamentsModel } from '@entities/tournaments';
 import { createForm } from '@lib';
 import {
-  createEvent, sample, split,
+  createEffect,
+  createEvent, restore,
+  sample,
+  split,
 } from 'effector';
 import { saveTournamentModal } from './save-tournament-modal';
 import { tournamentTeamsModel } from './tournament-teams';
@@ -19,6 +25,7 @@ const tournamentEdited = createEvent<SaveTournamentFormValues>();
 
 export const saveTournamentModel = createForm<SaveTournamentFormValues>();
 
+teamsModel.$entitiesList.reset(saveTournamentModal.closed);
 tournamentTeamsModel.$tournamentTeams.reset(saveTournamentModal.closed);
 
 split({
