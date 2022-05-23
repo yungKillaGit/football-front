@@ -6,7 +6,7 @@ import { MainPageLayout } from 'shared/ui';
 import { withProviders } from './providers';
 import './index.scss';
 
-const appBarLinks = [routesMap.dashboard, routesMap.tournaments, routesMap.teams];
+const appBarLinks = [routesMap.dashboard, routesMap.tournaments, routesMap.teams, routesMap.execution];
 
 function App() {
   return (

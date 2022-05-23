@@ -13,7 +13,7 @@ import {
   sample,
   Event,
   Effect,
-  Store,
+  Store, combine,
 } from 'effector';
 import { replace } from './common';
 import { createPage, PageModel } from './page-model';
@@ -37,6 +37,7 @@ export interface ResourceModel<Entity extends BaseModel, CreateDto, UpdateDto> {
     getManyFx: Effect<EmptyHandlerParams, ApiResponse<Entity[]>, Error>;
   };
   $entitiesList: Store<Entity[]>;
+  $entitiesById: Store<Record<number, Entity>>;
   $areEntitiesLoading: Store<boolean>;
 }
 
@@ -56,6 +57,14 @@ export const createResource = <Entity extends BaseModel, CreateDto, UpdateDto>({
   const getManyFx = createEffect(resourceApi.getMany);
 
   const $entitiesList = createStore<Entity[]>([]).reset(page.unmounted);
+  const $entitiesById = combine<Entity[], Record<number, Entity>>($entitiesList, (entities: Entity[]) => {
+    return entities.reduce((acc, key) => {
+      return {
+        ...acc,
+        [key.id]: key,
+      };
+    }, {});
+  });
   const $areEntitiesLoading = createStore(true).reset(page.unmounted);
 
   const events = {
@@ -130,6 +139,7 @@ export const createResource = <Entity extends BaseModel, CreateDto, UpdateDto>({
     events,
     effects,
     $entitiesList,
+    $entitiesById,
     $areEntitiesLoading,
   };
 };
