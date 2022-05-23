@@ -1,6 +1,5 @@
 import { Tournament } from '@api';
 import { reflect } from '@effector/reflect';
-import { dashboardModel } from '@features/dashboard';
 import {
   BaseFieldConfig,
   SelectInput,
@@ -9,28 +8,17 @@ import { tournamentsModel } from '../model';
 
 interface Props {
   tournamentsList: Tournament[];
-  tournamentsById: Record<number, Tournament>;
-  selectedTournament: Tournament | null;
+  field: BaseFieldConfig;
 }
 
 const TournamentsSelect = ({
-  tournamentsById,
   tournamentsList,
-  selectedTournament,
+  field,
 }: Props) => {
   const options = tournamentsList.map((tournament) => ({
     label: tournament.name,
     value: tournament.id,
   }));
-
-  const handleChange = (value: number) => {
-    dashboardModel.selectedTournamentChanged(tournamentsById[value]);
-  };
-
-  const field: BaseFieldConfig = {
-    value: selectedTournament?.id || '',
-    onChange: handleChange,
-  };
 
   return (
     <SelectInput
@@ -44,9 +32,7 @@ const TournamentsSelect = ({
 export default reflect({
   view: TournamentsSelect,
   bind: {
-    tournamentsById: tournamentsModel.$entitiesById,
     tournamentsList: tournamentsModel.$entitiesList,
-    selectedTournament: dashboardModel.$selectedTournament,
   },
   hooks: {
     mounted: tournamentsModel.effects.getManyFx,
