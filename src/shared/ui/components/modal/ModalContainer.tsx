@@ -17,6 +17,7 @@ export interface ModalContainerProps<ModalProps> {
   ModalContent: FC<ModalProps>;
   modal: ModalModel;
   $modalProps?: Store<ModalProps>;
+  modalComponentProps?: any;
 }
 
 function ModalContainer<ModalProps>({
@@ -25,6 +26,7 @@ function ModalContainer<ModalProps>({
   routing = true,
   modal,
   $modalProps,
+  modalComponentProps = {},
 }: ModalContainerProps<ModalProps>) {
   const modalState = useStore(modal.$modal);
 
@@ -70,7 +72,10 @@ function ModalContainer<ModalProps>({
     }
   }, [data, modal, modalSearchParams, name, open, routing, setModalSearchParams]);
 
-  const modalProps = useStore($modalProps || createStore({} as ModalProps));
+  const modalProps = {
+    ...useStore($modalProps || createStore({} as ModalProps)),
+    ...modalComponentProps,
+  };
 
   if (loading || !open) {
     return null;

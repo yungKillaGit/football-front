@@ -37,9 +37,15 @@ export interface Team extends BaseModel {
   players: Player[];
 }
 
+export interface TournamentGroup extends SimpleBaseModel {
+  name: string;
+}
+
 export interface Tournament extends BaseModel {
   name: string;
   startDate: Date;
   endDate: Date;
   teams: Team[];
+  tournamentGroups: TournamentGroup[];
+  ready: boolean;
 }

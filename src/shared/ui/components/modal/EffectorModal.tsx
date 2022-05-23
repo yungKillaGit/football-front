@@ -25,12 +25,13 @@ export const EffectorModal = <ModalProps extends {}>({
     modal.initialized();
   }
 
-  return function Wrapper() {
+  return function Wrapper(modalComponentProps: any = {}) {
     return (
       <ModalContainer
         {...rest}
         ModalContent={View}
         modal={modal}
+        modalComponentProps={modalComponentProps}
       />
     );
   };

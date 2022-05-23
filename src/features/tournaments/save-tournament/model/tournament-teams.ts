@@ -55,6 +55,7 @@ sample({
   fn: ({ response }) => {
     return response.teams.map((x) => x.id);
   },
+  filter: ({ response }) => response.teams && response.teams.length > 0,
 });
 
 sample({

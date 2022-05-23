@@ -29,6 +29,11 @@ const SaveTournamentModal = EffectorModal({
             tournamentTeamsModel.effects.getTeamsFx(),
             tournamentsModel.effects.getOneFx({
               payload: { id: data },
+              query: {
+                join: {
+                  relation: 'teams',
+                },
+              },
             }),
           ]);
         }
