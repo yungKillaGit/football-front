@@ -42,15 +42,23 @@ const Row = ({ children, preCondition = false, text }: RowProps) => {
 const ExecutionPage = ({ tournamentsById, selectedTournament }: Props) => {
   if (tournamentsById && selectedTournament) {
     const tournament = tournamentsById[selectedTournament.id];
+    console.log(tournamentsById);
+    if (tournament) {
+      return (
+        <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
+          <Row text="Teams allocated">
+            {null}
+          </Row>
+          <Row preCondition={tournament.ready}>
+            <AllocateTeamsButton tournament={tournament} />
+          </Row>
+        </Box>
+      );
+    }
     return (
-      <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
-        <Row text="Teams allocated">
-          {null}
-        </Row>
-        <Row preCondition={tournament.ready}>
-          <AllocateTeamsButton tournament={tournament} />
-        </Row>
-      </Box>
+      <div>
+        Please, select tournament on dashboard page
+      </div>
     );
   }
   return (

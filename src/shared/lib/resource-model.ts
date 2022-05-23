@@ -104,6 +104,9 @@ export const createResource = <Entity extends BaseModel, CreateDto, UpdateDto>({
       if (existingIndex !== -1) {
         return replace(state, existingIndex, payload.response);
       }
+      if (state.length === 0) {
+        return [payload.response];
+      }
       return state;
     },
   });
