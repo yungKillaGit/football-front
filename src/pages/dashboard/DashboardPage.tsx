@@ -1,8 +1,9 @@
 import { Tournament } from '@api';
 import { reflect } from '@effector/reflect';
 import { tournamentsModel, TournamentsSelect } from '@entities/tournaments';
+import GroupTeamsTable from '@features/allocate-teams/ui/GroupTeamsTable';
 import { dashboardModel } from '@features/dashboard';
-import { Box } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { BaseFieldConfig } from '@ui';
 import { groupBy } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -34,9 +35,25 @@ const DashboardPage = ({ tournamentsById, selectedTournament, tournamentsList }:
     }
   }, [selectedTournament]);
 
+  const groups = ['A', 'B', 'C', 'D', 'E', 'F'];
+
   return (
-    <Box>
+    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       <TournamentsSelect field={field} tournamentsList={tournamentsList} />
+      <Grid item xs={12} sx={{ display: 'flex', flexWrap: 'wrap', mt: 2 }} container spacing={2}>
+        {
+          Array.from(Array(6), (_, i) => i + 1).map((x) => {
+            return (
+              <Grid item sx={{ width: 'calc(100% / 3)' }}>
+                <Box>
+                  {`Group ${groups[x - 1]}`}
+                </Box>
+                <Box sx={{ background: 'lightgray', height: 280 }} />
+              </Grid>
+            );
+          })
+        }
+      </Grid>
     </Box>
   );
 };

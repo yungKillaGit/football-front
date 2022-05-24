@@ -44,6 +44,7 @@ const TeamPlayersActions = ({ currentPlayers, areEnoughPlayers }: Props) => {
     savePlayerModal.opened({
       data: row.displayId,
     });
+    savePlayerModal.initialized();
   };
 
   const handleDelete = async ({ row }: TableActionsProps<PlayerInfo>) => {

@@ -16,7 +16,9 @@ export const EffectorModal = <ModalProps extends {}>({
   onInit,
   ...rest
 }: Options<ModalProps>) => {
+  console.log(modal, 'modal');
   if (onInit) {
+    console.log('init');
     sample({
       clock: onInit(modal),
       target: modal.initialized,
