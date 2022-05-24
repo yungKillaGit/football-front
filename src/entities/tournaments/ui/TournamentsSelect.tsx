@@ -1,10 +1,8 @@
 import { Tournament } from '@api';
-import { reflect } from '@effector/reflect';
 import {
   BaseFieldConfig,
   SelectInput,
 } from '@ui';
-import { tournamentsModel } from '../model';
 
 interface Props {
   tournamentsList: Tournament[];
@@ -25,16 +23,9 @@ const TournamentsSelect = ({
       fullWidth
       options={options}
       field={field}
+      firstOptionSelected
     />
   );
 };
 
-export default reflect({
-  view: TournamentsSelect,
-  bind: {
-    tournamentsList: tournamentsModel.$entitiesList,
-  },
-  hooks: {
-    mounted: tournamentsModel.effects.getManyFx,
-  },
-});
+export default TournamentsSelect;

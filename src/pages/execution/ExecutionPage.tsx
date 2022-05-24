@@ -42,7 +42,6 @@ const Row = ({ children, preCondition = false, text }: RowProps) => {
 const ExecutionPage = ({ tournamentsById, selectedTournament }: Props) => {
   if (tournamentsById && selectedTournament) {
     const tournament = tournamentsById[selectedTournament.id];
-    console.log(tournamentsById);
     if (tournament) {
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: 600 }}>
@@ -55,11 +54,6 @@ const ExecutionPage = ({ tournamentsById, selectedTournament }: Props) => {
         </Box>
       );
     }
-    return (
-      <div>
-        Please, select tournament on dashboard page
-      </div>
-    );
   }
   return (
     <div>
